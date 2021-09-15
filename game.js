@@ -29,7 +29,6 @@ class Player{
 		  this.sprite = playerImgElem;
 		  this.gameBoard = gameBoard;
 		//	this.color = color;
-		console.log(this.sprite.width);
 			this.x = 0;
 			this.y = 0;
    }
@@ -220,8 +219,7 @@ class Game{
 		const rect = board.getBoundingClientRect();
 		const rectHeight = rect.bottom - rect.top;
 		const bottomLeftX = rect.left;
-		const bottomLeftY = 0;// rect.top - rectHeight;
-		console.log(`${rect.top}, ${rect.bottom}`);
+		const bottomLeftY = 0;
 		let cellCenterX = round(bottomLeftX + (this.cellWidth * 0.5));
 		const initCenterX = cellCenterX;
 		let cellCenterY = round(bottomLeftY + (this.cellHeight * 0.5));
