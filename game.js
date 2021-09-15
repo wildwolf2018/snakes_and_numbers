@@ -193,8 +193,6 @@ class Game{
 		const rect = elem.getBoundingClientRect();
 		const x = evt.clientX + window.scrollX - rect.left;
 		const y = rect.bottom  + window.scrollY - evt.clientY;
-		alert(`${x}, ${y}`);
-	//	if(typeof this.player == undefined) return;
 		this.playerPos = this.playerSprite.update(this.cells, x, y, this.cellWidth, this.cellHeight);
   }  
   
