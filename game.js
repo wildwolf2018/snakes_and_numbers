@@ -275,11 +275,12 @@ class Game{
     		upper = 25;
     		lower = 12;
     }
-    let num1 = 4;// Math.floor((Math.random() * upper) - lower);
-    const num2 = 5;//)Math.floor((Math.random() * upper) - lower);
+    let num1 = Math.floor((Math.random() * upper) - lower);
+    const num2 = Math.floor((Math.random() * upper) - lower);
+    const signOfNum1 = num1 >= 0 ? "&nbsp":"";
     const signOfNum2 = num2 > 0 ? "+":"-";  
-    this.expression.innerText = `${num1} ${signOfNum2} ${Math.abs(num2)}`;
-   // this.numOfMoves = Math.abs(num1 + num2);
+    this.expression.innerHTML = `<strong>${signOfNum1}${num1} ${signOfNum2} ${Math.abs(num2)}</strong>`;
+    this.numOfMoves = Math.abs(num1 + num2);
    }
    
    update(elapsedTime){
