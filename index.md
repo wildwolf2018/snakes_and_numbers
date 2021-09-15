@@ -1,1 +1,300 @@
 
+<!DOCTYPE html>
+<html lang="en">
+		<head>
+				<title>Snakes, Ladders and Numbers
+				</title>
+				<meta name="viewport"        content="width=device-width, initial-scale=1">
+				<link href="game.css" rel="stylesheet">
+				<script defer src="game.js"></script>
+		</head>
+		<body>
+				<div class="top-container">
+		  		<div class="flex-item-score">SCORE: 10000</div>
+		  	<img id="confirm" src="Cross.png" alt="answer confirmation"	width="25vh" height="25vh"><div class="flex-item-time">
+		  				TIME: 110
+		  		</div>
+		  	</div>
+		  	<div class="board-container">
+			   <img id="board" src="board.png" alt="game board">
+				</div>
+				<button><span id="btn" style="">ADD</span></button>
+				<span id="exp"><strong>5 + 8 = </strong></span>
+				<span id="answer"><strong></strong></span>
+				<script type="text/javascript">
+	//PLAYER
+	/*class Player{
+		constructor(playerImgElem, gameBoard)    {
+		  this.sprite = playerImgElem;
+		  this.gameBoard = gameBoard;
+		//	this.color = color;
+		console.log(this.sprite.width);
+			this.x = 0;
+			this.y = 0;
+   }
+   	
+	 update(board, xCoord, yCoord, cellWidth, cellHeight){
+	   const result = board.filter(cell => {
+	 		 const leftCellBoundary = cell.getCenterX - cellWidth / 2;
+	 		 const rightCellBoundary = cell.getCenterX + cellWidth / 2;
+	 		 const topCellBoundary = cell.getCenterY - cellHeight / 2;
+	 		 const bottomCellBoundary = cell.getCenterY + cellHeight / 2;
+	 		return ((xCoord > leftCellBoundary && xCoord < rightCellBoundary) && (yCoord > topCellBoundary && yCoord < bottomCellBoundary)); 		
+	   });
+	  const shift = 4;
+	  console.log(`index = ${JSON.stringify(result)}`);
+    let index = result[0].id;
+this.sprite.style.left = `${2.5 * (1 +   ((index % 10) )*shift)}vw`;	 
+const numRows = 10; 
+const bottomOffset = 10;
+   	    this.sprite.style.bottom = `${this.gameBoard.height / numRows * 0.5 * (2 * Math.floor(index / 10)+1)  + bottomOffset}px`;
+	return index;			
+		}		
+}
+
+// CELLS
+class Cell {
+  constructor(index, centerX, centerY){
+  		this.centerX = centerX,
+  		this.centerY = centerY,
+  		this.index = index	
+  }
+  
+  set setCenterX(x){
+  		this.centerX = x;
+  }
+  
+  get getCenterX(){
+  		return this.centerX;
+  }
+  
+  set setCenterY(y){
+  		this.centerY = y;
+  }
+  
+  get getCenterY(){
+  		return this.centerY;
+  }
+  
+  get id(){
+ 		return this.index;
+ }
+}
+
+// Rounds float point number to specified decimal places 
+function round(num, decimalPlaces = 0) { 
+  num = Math.round(num + "e" + decimalPlaces); 
+  return Number(num + "e" + -decimalPlaces); 
+  }
+
+// GAME
+										
+class Game{
+  constructor(){
+		  // Initial state
+			this.scoreTotal = 0;// Initial score
+			this.initTime = 110;// Initial time
+			this.resultImages = ["Cross.png", "tick.png"];
+			this.cells = [];
+	    this.isGameOver = false;
+	    this.currentTime = 10000;
+	    this.previousTime = 0;
+	    this.playerPos = 0;
+	    this.numOfMoves = 0;
+	    this.difficulty = "easy";
+	    // Game board labels
+	    this.score = document.querySelector(".flex-item-score");
+	    this.result = document.querySelector("#confirm");
+	    this.time = document.querySelector(".flex-item-time");
+	    //
+	    this.button = document.querySelector("#btn");
+	    this.expression = document.querySelector("#exp");
+	    this.init();
+	    this.initializeGrid();
+	    this.positionPlayer();
+		}
+		
+		// Initialize the game board state
+	 init(){
+			this.button.addEventListener("click",  evt => this.generateExp(this.difficulty));				
+   }
+  
+   getMousePos(elem, evt){
+		const rect = elem.getBoundingClientRect();
+		const x = evt.clientX + window.scrollX - rect.left;
+		const y = rect.bottom  + window.scrollY - evt.clientY;
+		alert(`${x}, ${y}`);
+	
+		this.playerPos = this.playerSprite.update(this.cells, x, y, this.cellWidth, this.cellHeight);
+		console.log(`${this.playerPos}`);
+  }  
+  
+  getCoords(evt){
+	  this.getMousePos(this.board, evt);
+	}
+	
+   initializeGrid(){
+     this.board = document.querySelector("#board");
+    this.board.addEventListener("click", (e) => this.getCoords(e));
+     const cellWidth = this.board.width / 10
+		// 1. Initialize board cells
+		for(let i = 0; i < 100; i++){
+				this.cells.push(new Cell(0, 0, 0));
+		}
+		this.initBoardCells();
+   }
+    
+   initBoardCells(){
+		const numOfCols = 10;
+		const numOfRows = 10;
+		this.cellWidth = round(this.board.width / numOfCols);
+		this.cellHeight = round(this.board.height / numOfRows);
+		
+		const rect = board.getBoundingClientRect();
+		const rectHeight = rect.bottom - rect.top;
+		const bottomLeftX = rect.left;
+		const bottomLeftY = 0;
+		
+		let cellCenterX = round(bottomLeftX + (this.cellWidth * 0.5));
+		const initCenterX = cellCenterX;
+		let cellCenterY = round(bottomLeftY + (this.cellHeight * 0.5));
+		const initCenterY = cellCenterY;
+		for(let row = 0; row < numOfRows; row++){
+				for(let col = 0; col < numOfCols; col++){
+				    let index = row * numOfCols + col;
+						this.cells[index].index = index;
+		this.cells[index].setCenterX = cellCenterX;
+		this.cells[index].setCenterY = cellCenterY;
+						console.log(`${index}, x = ${this.cells[index].getCenterX}, y = ${this.cells[index].getCenterY}`)
+						cellCenterX += this.cellWidth;					
+				}
+				cellCenterY += this.cellHeight;
+				cellCenterX = initCenterX;
+		}
+}
+
+  positionPlayer() {
+  		this.container = document.querySelector(".board-container");
+  		this.player = document.querySelector("img");
+  		const player = this.player;
+  	  this.player.setAttribute("src", "square.png");
+
+// Set size and start position of player 
+    this.player.style.width = "5vw";
+    this.player.style.height = "5vw";
+    this.player.style.position = "relative";
+    let shift = 4;
+    let index = 1;
+    this.player.style.left = `${2.5 * (1 +   ((index) % 10 -1)*shift)}vw`;
+    this.container.append(this.player);
+ 
+    const numRows = 10;
+    const bottomOffset = 10;
+    this.player.style.bottom = `${this.board.height / numRows * 0.5 * (2 * Math.floor(index / 10)+1)  + bottomOffset}px`;
+    this.playerSprite = new Player(this.player, this.board);
+    console.log(this.playerSprite);
+  }
+  
+  generateExp(difficulty){
+    let upper;
+    let lower;
+    if(difficulty === "easy"){
+    		upper = 13;
+    		lower = 6;
+    } else{
+    		upper = 25;
+    		lower = 12;
+    }
+    let num1 = Math.floor((Math.random() * upper) - lower);
+    const num2 = Math.floor((Math.random() * upper) - lower);
+    const signOfNum1 = num1 >= 0 ? "&nbsp": "";
+    const signOfNum2 = num2 > 0 ? "+":"-";  
+    this.expression.innerHTML = `<strong>${signOfNum1}${num1} ${signOfNum2} ${Math.abs(num2)}</strong>`;
+    this.numOfMoves = Math.abs(num1 + num2);
+   }
+   
+   update(elapsedTime){
+    this.displayTime(round(elapsedTime, 0));
+     //TODO
+     // Update the game state
+   }
+   
+   displayTime(currentTime){
+   if(this.currentTime <= 0)return;
+      this.currentTime = this.initTime -  currentTime;
+      let timeText = "";
+   		if(this.currentTime >= 0 && this.currentTime  < 10){
+   				timeText = `TIME: 00${this.currentTime}`;
+   		}else if(this.currentTime >= 10 && this.currentTime < 100){
+   				timeText = `TIME: 0${this.currentTime}`;
+   		}else {timeText = `TIME: ${this.currentTime}`;}
+   	  this.time.innerText = timeText;
+
+   }
+}
+
+// GAME START
+  const game = new Game();
+  game.init();
+
+  let startTime, previousTime;		
+  function loop(timestamp){
+		if(startTime === undefined)
+				startTime = timestamp;
+		
+		const elapsed = timestamp - startTime;
+	  if(previousTime !== timestamp){
+		const time = Math.min(0.001 * elapsed, 110000);
+		game.update(time);		
+	}
+	
+	if(elapsed < 110000){
+				this.previousTime = timestamp;
+		window.requestAnimationFrame(loop);
+		}
+ }
+
+window.requestAnimationFrame(loop);						
+						
+*/						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+				
+				
+				</script>
+		</body>
+</html>
+
+
+
