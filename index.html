@@ -114,7 +114,6 @@ function loadHighScores(){
      recordedScores.scores[i] = scores[i].substring(scores[i].indexOf(" ") + 1)
     }  
   }else{  
-  console.log("load default scores")
     loadDefaultScores()
   }				
 }	
@@ -152,7 +151,6 @@ highScores: document.querySelector(".score-screen-container"), choiceDialog: doc
     game.started = true 
 		eventTarget.audio.pause()}, 1000)		
 	window.requestAnimationFrame(loop)
-  console.log("animation end")	
  }
 
  function menuFadeOut(){
@@ -164,7 +162,6 @@ screens.menu.classList.add("splash-fadeout")
  
 screens.menu.addEventListener("animationend", e => { 
     screens.menu.style.top = "100vh"
-    screens.menu.style.opacity="1.0"
  }, false)
  
  function chooseMode(mode){
@@ -267,7 +264,6 @@ function loop(timestamp){
    }else{
 	  	 game.update(time)
   }
-	
 	if(elapsed < gameTime){
 				previousTime = timestamp
 		window.requestAnimationFrame(loop)
@@ -279,8 +275,6 @@ function loop(timestamp){
 screens.introScreen.addEventListener("animationend", e => { 
   screens.introScreen.style.left = "100vw"
   screens.choiceDialog.style.left= "110vw"
-  screens.introScreen.style.opacity = "1.0"
-  screens.choiceDialog.style.opacity= "1.0"
    beginPlay()
  }, false)
  
@@ -293,7 +287,6 @@ screens.level.style.left = "0"
     const num2 = Math.floor(Math.random() * range) + lower
     return [num1, num2]
   }, screens)					
-  console.log("animation start")
  }, false)
 
 function findMaximumPosition(score, initials, records){
@@ -316,10 +309,9 @@ function findMaximumPosition(score, initials, records){
 }
 
 function showInitials(){
-const userInput = document.getElementById("username").value
-console.log(`Username is ${userInput}`)
-const score = document.querySelector("#high_score")
-  // Update the high scores 
+  const userInput = document.getElementById("username").value
+  const score = document.querySelector("#high_score") 
+ // Update the high scores 
   let {pos, temp, temp2} = findMaximumPosition(score.value, userInput, recordedScores) 
   for(let i = pos; i < 5; i++)	{
     let x = recordedScores.scores[i]
@@ -330,28 +322,30 @@ const score = document.querySelector("#high_score")
     recordedScores.initials[i] = temp2
     temp2 = y
    }
+  // Store the high scores
+   let scoreRecords = storeRecentScore() 
+   setCookie("scores", storeRecords)
+
+   backToMenu()   
+}
+
+function storeRecentScore(){
    let value = ""
    for(let i = 0; i < 5; i++){
-   		value += `${recordedScores.initials[i]} ${recordedScores.scores[i]},`
+      value += `${recordedScores.initials[i]} ${recordedScores.scores[i]},`
    }
    value = value.substring(0, value.length-1)
-   console.log(`scores inside showInitials: ${JSON.stringify(value)}`)
-   setCookie("scores",value)
-const playerInitials = document. querySelector(".initials")
-playerInitials.style.top = "35vw"
+   return value
+}
+
+function backToMenu(){
+  const playerInitials = document. querySelector(".initials")
+  playerInitials.style.top = "35vw"
   playerInitials.style.left = "500vw" 
-      
- screens.menu.style.top = "0" 
- window.location.reload()
+  screens.menu.style.top = "0" 
+  window.location.reload()
 }
 
-function swapElems(elem){
-		elem.parentNode.insertBefore(elem, elem.parentNode.firstChild)
-}
-
-/*new URLSearchParams(window.location.search).forEach((value, name) => {
-		console.log(`name = ${name},value =  ${value}`)		
-})*/
 let game; //Game board state and operatiop1
 let gameMode = "easy"
 let startTime //Current delta time 
@@ -362,12 +356,8 @@ const eventTarget = new EventTarget()
 // Splash screen intro music
 const intro = eventTarget.audio
 intro.src = sounds[3]
-loadHighScores()
-console.log(`${JSON.stringify(recordedScores)}`)
-console.log(window.innerWidth)  
-console.log(window.innerHeight)
-</script>
-		</body>
+   </script>
+</body>
 </html>
 
 
